@@ -29,7 +29,6 @@ add_executable(
     FileUtilsTest.cpp
     GorillaDumperUtilsTest.cpp
     KeyListWriterTest.cpp
-    PersistentKeyListTest.cpp
     TimeSeriesStreamTest.cpp
     TimeSeriesTest.cpp
     TimerTest.cpp

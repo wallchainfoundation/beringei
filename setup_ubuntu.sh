@@ -55,6 +55,7 @@ ln -sfT /usr/local/facebook-${FB_VERSION} /usr/local/facebook
 
 export LDFLAGS="-L/usr/local/facebook/lib -Wl,-rpath=/usr/local/facebook/lib"
 export CPPFLAGS="-I/usr/local/facebook/include"
+export CXXFLAGS=${CPPFLAGS}
 
 cd /tmp
 
@@ -72,36 +73,41 @@ tar xzvf proxygen-${FB_VERSION}.tar.gz
 tar xzvf mstch-master.tar.gz
 tar xzvf zstd-${ZSTD_VERSION}.tar.gz
 
+echo "updating mstch-master..."
 pushd mstch-master
 cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/facebook-${FB_VERSION} .
 make install
 popd
 
+echo "updating zstd.."
 pushd zstd-${ZSTD_VERSION}
 make install PREFIX=/usr/local/facebook-${FB_VERSION}
 popd
 
-
+echo "updating folly..."
 pushd folly-${FB_VERSION}/folly
 autoreconf -ivf
 ./configure --prefix=/usr/local/facebook-${FB_VERSION}
 make install
 popd
 
+echo "updating wangle..."
 pushd wangle-${FB_VERSION}/wangle
-cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/facebook-${FB_VERSION} -DBUILD_SHARED_LIBS:BOOL=ON .
+cmake -DBUILD_TESTS=OFF -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr/local/facebook-${FB_VERSION} -DBUILD_SHARED_LIBS:BOOL=ON .
 make
 # Wangle tests are broken. Disabling ctest.
 # ctest
 make install
 popd
 
+echo "updating fbthrift..."
 pushd fbthrift-${FB_VERSION}/thrift
 autoreconf -ivf
 ./configure --prefix=/usr/local/facebook-${FB_VERSION}
 make install
 popd
 
+echo "updating proxygen..."
 pushd proxygen-${FB_VERSION}/proxygen
 autoreconf -ivf
 ./configure --prefix=/usr/local/facebook-${FB_VERSION}
