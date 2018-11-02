@@ -18,8 +18,7 @@ set(GTEST_DIR "${CMAKE_BINARY_DIR}/beringei/third-party/gtest/src")
 
 externalproject_add(
     gtest_tp
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG release-1.8.0
+    URL https://github.com/google/googletest/archive/release-1.8.0.tar.gz
     CMAKE_ARGS
         -Dgtest_force_shared_crt=${GTEST_FORCE_SHARED_CRT}
         -Dgtest_disable_pthreads=${GTEST_DISABLE_PTHREADS}
